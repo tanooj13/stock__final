@@ -10,6 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import pickle
 from nltk.classify import NaiveBayesClassifier
 import streamlit as st
+from sklearn.externals import joblib
 # To handle utf-8 encoding
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -96,8 +97,7 @@ def extract_features(words):
 
 def modelling(headlines,option):
 
-    with open('sentiment_model.pkl', 'rb') as f:
-        classifier = pickle.load(f)
+    classifier = joblib.load('sentiment_model.pkl')
 
     df1 = pd.DataFrame(headlines,columns=['Headlines'])
     df1.drop('Unnamed: 0',axis = 1,inplace = True)
