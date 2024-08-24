@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import pickle
 from nltk.classify import NaiveBayesClassifier
 import streamlit as st
-from sklearn.externals import joblib
+import joblib
 # To handle utf-8 encoding
 sys.stdout.reconfigure(encoding='utf-8')
 
