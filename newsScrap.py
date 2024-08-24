@@ -13,47 +13,62 @@ import streamlit as st
 # To handle utf-8 encoding
 sys.stdout.reconfigure(encoding='utf-8')
 
+
+option = st.selectbox(
+    "Select the stock:",
+    ("Mobile phone","Google", "Microsoft"),
+)
+st.write("You selected:", option)
+
+click = st.button("Click", type="primary")
 # Initialize the WebDriver (Chrome)
-driver = webdriver.Chrome()
-
-# List to store all the scraped headlines
 headlines = []
+def webscrap():
+    driver = webdriver.Chrome()
 
-# Number of pages to scrape
-num_pages = 1
-query = 'Microsoft'
-# Start the loop for scraping multiple pages
-for i in range(0, num_pages * 10, 10):  
-    driver.get(f"https://www.google.com/search?q={query}+stock+price&sca_esv=28194934ae825b70&sca_upv=1&rlz=1C1VDKB_en-GBIN1079IN1079&tbm=nws&ei=E0zJZpm8O8SG4-EP3fHfgQE&start={i}&sa=N&ved=2ahUKEwjZke_o0IyIAxVEwzgGHd34NxA4ChDy0wN6BAgCEAc&biw=1536&bih=776&dpr=1.25")
+    # List to store all the scraped headlines
+    
 
-    try:
-        # Wait for headlines to be present
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, "n0jPhd"))
-        )
+    # Number of pages to scrape
+    num_pages = 1
+    query = 'Microsoft'
+    # Start the loop for scraping multiple pages
+    for i in range(0, num_pages * 10, 10):  
+        driver.get(f"https://www.google.com/search?q={query}+stock+price&sca_esv=28194934ae825b70&sca_upv=1&rlz=1C1VDKB_en-GBIN1079IN1079&tbm=nws&ei=E0zJZpm8O8SG4-EP3fHfgQE&start={i}&sa=N&ved=2ahUKEwjZke_o0IyIAxVEwzgGHd34NxA4ChDy0wN6BAgCEAc&biw=1536&bih=776&dpr=1.25")
 
-        # Find all elements containing headlines
-        elems = driver.find_elements(By.CLASS_NAME, "n0jPhd")
+        try:
+            # Wait for headlines to be present
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_all_elements_located((By.CLASS_NAME, "n0jPhd"))
+            )
 
-        print(f"{len(elems)} headlines found on page {i//10 + 1}")
+            # Find all elements containing headlines
+            elems = driver.find_elements(By.CLASS_NAME, "n0jPhd")
 
-        # Append each headline to the list
-        for elem in elems:
-            headline = elem.text
-            headlines.append(headline)  
-            print(f"Appended headline: {headline}")
+            print(f"{len(elems)} headlines found on page {i//10 + 1}")
 
-    except Exception as e:
+            # Append each headline to the list
+            for elem in elems:
+                headline = elem.text
+                headlines.append(headline)  
+                print(f"Appended headline: {headline}")
+
+        except Exception as e:
         
-        # print(f"An error occurred on page {i//10 + 1}: {e}")
-        break
+            # print(f"An error occurred on page {i//10 + 1}: {e}")
+            break
 
     # To avoid bot detection
-    time.sleep(4)
+        time.sleep(4)
 
 
-driver.close()
+    driver.close()
 
+    return headlines
+
+if (click):
+    headlines = webscrap()
+else:st.write("Select a company")
 
 # for idx, headline in enumerate(headlines, start=1):
 #     print(f"{idx}: {headline}")
@@ -79,9 +94,9 @@ def preprocess_text(text):
 def extract_features(words):
   return {word:True for word in words}
 
-def modelling(headlines,query):
+def modelling(headlines,option):
 
-    with lzma.open('compressed_data.pkl.xz', 'rb') as f:
+    with open('sentiment_model.pkl', 'rb') as f:
         classifier = pickle.load(f)
 
     df1 = pd.DataFrame(headlines,columns=['Headlines'])
@@ -102,11 +117,11 @@ def modelling(headlines,query):
     else:st.write('Negative')
 
 
-option = st.selectbox(
-    "Select the stock:",
-    ("Mobile phone","Google", "Microsoft"),
-)
-st.write("You selected:", option)
+# option = st.selectbox(
+#     "Select the stock:",
+#     ("Apple","Google", "Microsoft"),
+# )
+# st.write("You selected:", option)
 modelling(headlines,option)
 
 
