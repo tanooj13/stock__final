@@ -30,11 +30,11 @@ def webscrap():
     
 
     # Number of pages to scrape
-    num_pages = 1
-    query = 'Microsoft'
+    num_pages = 10
+    
     # Start the loop for scraping multiple pages
     for i in range(0, num_pages * 10, 10):  
-        driver.get(f"https://www.google.com/search?q={query}+stock+price&sca_esv=28194934ae825b70&sca_upv=1&rlz=1C1VDKB_en-GBIN1079IN1079&tbm=nws&ei=E0zJZpm8O8SG4-EP3fHfgQE&start={i}&sa=N&ved=2ahUKEwjZke_o0IyIAxVEwzgGHd34NxA4ChDy0wN6BAgCEAc&biw=1536&bih=776&dpr=1.25")
+        driver.get(f"https://www.google.com/search?q={option}+stock+price&sca_esv=28194934ae825b70&sca_upv=1&rlz=1C1VDKB_en-GBIN1079IN1079&tbm=nws&ei=E0zJZpm8O8SG4-EP3fHfgQE&start={i}&sa=N&ved=2ahUKEwjZke_o0IyIAxVEwzgGHd34NxA4ChDy0wN6BAgCEAc&biw=1536&bih=776&dpr=1.25")
 
         try:
             # Wait for headlines to be present
