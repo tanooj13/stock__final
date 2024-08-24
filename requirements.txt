@@ -1,0 +1,4 @@
+pandas==1.5.3
+selenium==4.5.0
+nltk==3.7
+streamlit==1.15.0
