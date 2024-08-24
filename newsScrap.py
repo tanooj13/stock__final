@@ -97,7 +97,8 @@ def extract_features(words):
 
 def modelling(headlines,option):
 
-    classifier = joblib.load('sentiment_model.pkl')
+    with open('sentiment_model.pkl', 'rb') as f:
+        classifier = joblib.load(f)
 
     df1 = pd.DataFrame(headlines,columns=['Headlines'])
     df1.drop('Unnamed: 0',axis = 1,inplace = True)
